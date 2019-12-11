@@ -2,6 +2,7 @@
 
 #include "heap headers//Iheap.h"
 #include "heap headers//StlHeap.h"
+#include "heap headers//AVLtree.h"
 #include <stdexcept>
 #include <iostream>
 #include <string>
@@ -40,6 +41,7 @@ void doRequests (IHeap& heap, StlHeap& sh, std::ifstream& fin,
 
 void checkEqual (IHeap& heap1, IHeap& heap2, const std::string& errorMessage) {
 	while (!heap1.Empty()) {
+		//std::cout << heap1.GetMin() << " " << heap2.GetMin() << std::endl;
 		ASSERT_EQUAL (heap1.GetMin(), heap2.GetMin());
 		heap1.ExtractMin();
 		heap2.ExtractMin();
@@ -64,13 +66,13 @@ void mergeTest (IHeap& heap1, IHeap& heap2) {
 	doRequests (heap2, sh2, fin, "end", 1);
 	heap1.Merge(heap2);
 	sh1.Merge(sh2);
-	if (!sh2.Empty() || !heap2.Empty()) {
+	if (!heap2.Empty() || !sh2.Empty()) {
 		throw std::runtime_error ("merge works incorrectly");
 	}
 	checkEqual (heap1, sh1, "results of merge are not equal");
 }
 
-int randomInt (int module = 1000000000) {
+int randomInt (int module = 1000000) {
 	return ((rand() % 1000) + (rand() % 1000) * 1000 +
 			(rand() % 1000) * 1000 * 1000) % module;
 }
